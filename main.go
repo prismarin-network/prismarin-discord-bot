@@ -1,37 +1,24 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"log"
 	"os"
 	"primsarin-discord-bot/roles"
-	"time"
 )
 
-var token = "OTY3NjE2MDI1Mzc1OTM2NTgy.YmS4pQ.IvpXoMNsi1dlCadVlPsw_jeei0k"
+var token string
 
-type CustomWriter struct {
-	File *os.File
-}
-
-func (writer *CustomWriter) Write(data []byte) (int, error) {
-	message := string(data)
-	fmt.Printf(message)
-	writer.File.WriteString(message)
-	return len(data), nil
-}
-
-func modifyLogger() {
-	file, _ := os.OpenFile(fmt.Sprintf("%s.log", time.Now().Format("2006-01-02")), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	w := CustomWriter{
-		File: file,
-	}
-	defer file.Close()
-	log.SetOutput(&w)
+func initFlags() {
+	flag.StringVar(&token, "token", "default", "Discord bot auth token")
+	flag.Parse()
 }
 
 func main() {
+	initFlags()
+
 	discord, err := discordgo.New("Bot " + token)
 	if err != nil {
 		log.Fatal(err)
@@ -40,7 +27,7 @@ func main() {
 	defer discord.Close()
 
 	printBanner()
-	modifyLogger()
+	ModifyLogger()
 
 	log.Println("Bot is now running")
 	roles.InitReactionRoles(discord)
