@@ -9,7 +9,11 @@ written in Go 1.18
 ```go
 go build
 
-Run `prismarin-discord-bot` executeable
+# Run `prismarin-discord-bot` executeable with -token value flag
+
+# Windows Example
+	
+.\prismarin-discord-bot.exe -token example
 ```
 
 
